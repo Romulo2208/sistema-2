@@ -1,0 +1,140 @@
+<!-- Primeira div: Formulário de upload -->
+<div *ngIf="userRole === 'admin' || userRole === 'coordenador_geral'" class="col-lg-12 col-md-8 mb-2">
+  <div class="card">
+    <div class="d-flex mb-3">
+      <input
+        type="file"
+        accept="*/*"
+        (change)="onFileSelected($event)"
+        class="form-control-file"
+        #fileInput
+      />
+      <button
+        class="btn btn-primary ms-2"
+        [disabled]="!selectedFile"
+        (click)="onUpload()"
+      >
+        Enviar Documento
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="col-lg-12 col-md-8 mb-2">
+  <div *ngIf="successMessage" class="alert alert-success" role="alert">
+    {{ successMessage }}
+  </div>
+  <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+    {{ errorMessage }}
+  </div>
+  <div class="card">
+    <h5 class="card-title">Documentos Enviados</h5>
+    <table class="table table-hover tr-selecionavel">
+      <thead>
+        <tr style="color: #1e6bb8;">
+          <th>#</th>
+          <th>Nome do Arquivo</th>
+          <th>Download</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let doc of files; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>
+            <ng-container *ngIf="editingFile?.id !== doc.id">
+              {{ doc.name }}
+            </ng-container>
+            <ng-container *ngIf="editingFile?.id === doc.id">
+              <input type="text" [(ngModel)]="newFileName" class="form-control d-inline-block w-auto" />
+              <button class="btn btn-sm btn-success ml-2" (click)="saveEdit()">Salvar</button>
+              <button class="btn btn-sm btn-secondary ml-2" (click)="cancelEdit()">Cancelar</button>
+            </ng-container>
+          </td>
+          <td>
+            <a href="#" (click)="onDownload(doc); $event.preventDefault()" title="Download">
+              <i class="fa fa-download" aria-hidden="true"></i>
+            </a>
+            <a href="#" *ngIf="userRole === 'admin' || userRole === 'coordenador_geral'" (click)="startEdit(doc); $event.preventDefault()" title="Renomear" class="ml-3">
+              <i class="fa fa-edit" aria-hidden="true"></i>
+            </a>
+            <a href="#" *ngIf="userRole === 'admin' || userRole === 'coordenador_geral'" (click)="onDelete(doc); $event.preventDefault()" title="Excluir" class="ml-3 text-danger">
+              <i class="fa fa-trash" aria-hidden="true"></i>
+            </a>
+          </td>
+        </tr>
+        <tr *ngIf="files.length === 0">
+          <td colspan="3" class="text-center">Nenhum documento enviado</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Tabela estática: Documentos pré-definidos -->
+    <h5 class="card-title mt-4">Documentos Modelo</h5>
+    <table class="table table-hover tr-selecionavel">
+      <thead>
+        <tr style="color: #1e6bb8;">
+          <th>#</th>
+          <th>Nome do Arquivo</th>
+          <th>Download</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>Acordo de Cooperação Técnica PROFESP-FAB / Prefeitura (Modelo)</td>
+          <td><a href="assets/docs/Modelo ACORDO DE COOPERAÇÃO TÉCNICA_ PROFESP-FAB - Prefeitura.docx" target="_blank"><i class="fa fa-download" aria-hidden="true"></i></a></td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Acordo de Cooperação Técnica PROFESP-FAB / Universidade (Modelo)</td>
+          <td><a href="assets/docs/Modelo ACORDO DE COOPERAÇÃO TÉCNICA_PROFESP-FAB - Universidade.docx" target="_blank"><i class="fa fa-download" aria-hidden="true"></i></a></td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>Apólice de Seguro - Poupex</td>
+          <td><a href="assets/docs/Apólice_de_Seguro.pdf" target="_blank"><i class="fa fa-download" aria-hidden="true"></i></a></td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>DCA 163-1</td>
+          <td><a href="assets/docs/DCA 163_1_BCA.pdf" target="_blank"><i class="fa fa-download" aria-hidden="true"></i></a></td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>ICA 160-50</td>
+          <td><a href="assets/docs/ICA 160-50.pdf" target="_blank"><i class="fa fa-download" aria-hidden="true"></i></a></td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td>ICA 163-3</td>
+          <td><a href="assets/docs/ICA 163-3.pdf" target="_blank"><i class="fa fa-download" aria-hidden="true"></i></a></td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td>Planejamento Pedagógico de Núcleo (Modelo)</td>
+          <td><a href="assets/docs/Modelo de PPN.docx" target="_blank"><i class="fa fa-download" aria-hidden="true"></i></a></td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td>Termo de Autorização - PROFESP-PJP</td>
+          <td><a href="assets/docs/Termo de Autorização - PROFESP-PJP.docx" target="_blank"><i class="fa fa-download" aria-hidden="true"></i></a></td>
+        </tr>
+        <tr>
+          <td>9</td>
+          <td>Relatório de Prestação de Contas de TED (Modelo)</td>
+          <td><a href="assets/docs/Modelo de Relatório de Prestação de Contas de TED.docx" target="_blank"><i class="fa fa-download" aria-hidden="true"></i></a></td>
+        </tr>
+        <tr>
+          <td>10</td>
+          <td>Minuta e Plano de Trabalho</td>
+          <td><a href="assets/docs/Minuta e Plano de Trabalho.pdf" target="_blank"><i class="fa fa-download" aria-hidden="true"></i></a></td>
+        </tr>
+        <tr>
+          <td>11</td>
+          <td>Modelo de Acordo e Cooperação Técnica (ACT)</td>
+          <td><a href="assets/docs/acordo-de-cooperacao-tecnica-marco-2024.pdf" target="_blank"><i class="fa fa-download" aria-hidden="true"></i></a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

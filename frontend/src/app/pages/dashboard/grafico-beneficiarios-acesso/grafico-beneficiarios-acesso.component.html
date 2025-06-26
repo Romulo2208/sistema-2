@@ -1,0 +1,17 @@
+<div class="row">
+    <div class="col-12 mb-4">
+        <div widget class="card border-0 box-shadow">
+            <div class="card-header transparent border-0 text-muted">
+                <h5 class="mb-0">Quantitativo de Beneficiários (Por Núcleo)</h5>
+            </div>
+            <div class="card-body widget-body">              
+                <ngx-charts-advanced-pie-chart
+                    [label]="label"
+                    [scheme]="colorScheme"
+                    [results]="single"
+                    (select)="onSelect($event)">
+                </ngx-charts-advanced-pie-chart>     
+            </div>
+        </div>
+    </div>   
+</div>

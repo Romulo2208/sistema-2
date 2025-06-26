@@ -1,0 +1,655 @@
+<div class="row">
+  <div class="col-md">
+    <div widget class="card border-0 box-shadow">
+      <div class="card-header transparent border-0 text-muted">
+        <h5 class="mb-0">{{pageTitle}}</h5>
+      </div>
+      <div class="card-body pt-0 widget-body">
+        <div class="row">
+          <div class=" col-md">
+            <a routerLink="/beneficiarios" class="btn btn-secondary mb-2 float-right">
+              <i class="fa fa-arrow-left"></i> Voltar Lista
+            </a>
+          </div>
+        </div>
+
+        <div class="row">
+          <div *ngFor="let step of steps; let last = last" class="col-md-3 col-sm-6 col-12 step text-center">
+            <button class="btn btn-lg btn-block text-white p-2 mb-2 rounded step-content"
+              [class.bg-success]="step.active" (click)="setStep(step)">
+              <i class="fa {{ step.icon }} mr-2" aria-hidden="true"></i>
+              <span class="step-name ">{{step.name}}</span>
+            </button>
+          </div>
+        </div>
+
+    
+
+        <div *ngFor="let step of steps" [hidden]="!step.active" class="col">
+          <div class="row">
+            <h4 class="mt-3 mb-3"><i class="fa {{ step.icon }}"></i> {{step.name}}</h4>
+          </div>
+
+          <!--Início do Formulário-->
+          <form *ngIf="step.name=='Beneficiario'" [formGroup]="beneficiarioForm">
+
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label class="form-control-label">Nome Completo do Beneficiário<span
+                    class="text-danger">*</span></label>
+                <input type="text" placeholder="Nome completo do Beneficiário" class="form-control"
+                  formControlName="nome_completo" />
+
+                <div class="text-danger"
+                  *ngIf="beneficiarioForm.get('nome_completo').invalid && beneficiarioForm.get('nome_completo').touched">
+                  <div *ngIf="beneficiarioForm.get('nome_completo').errors.required">dado obrigatório</div>
+                </div>
+              </div>
+
+
+              <div class="form-group col-md-3">
+                <label class="form-control-label">CPF<span class="text-danger">*</span></label>
+                <input type="text" mask="000.000.000-00" placeholder="000.000.000-00" class="form-control"
+                  formControlName="cpf" />
+
+                <div class="text-danger"
+                  *ngIf="beneficiarioForm.get('cpf').invalid && beneficiarioForm.get('cpf').touched">
+                  <div *ngIf="beneficiarioForm.get('cpf').errors.required">dado obrigatório</div>
+                  <div *ngIf="beneficiarioForm.get('cpf').errors.cpfInvalid">CPF inválido</div>
+                </div>
+              </div>
+
+
+              <div class="form-group col-md-3">
+                <label class="form-control-label">Data de Nascimento <span class="text-danger">*</span></label>
+                <input type="date" class="form-control" formControlName="data_nascimento" />
+
+                <div class="text-danger"
+                  *ngIf="beneficiarioForm.get('data_nascimento').invalid && beneficiarioForm.get('data_nascimento').touched">
+                  <div *ngIf="beneficiarioForm.get('data_nascimento').errors.required">dado obrigatório</div>
+                </div>
+              </div>
+
+            </div>
+
+
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label class="form-control-label">Nome do Pai </label>
+                <input type="text" placeholder="Nome completo do pai" class="form-control" formControlName="nome_pai" />
+
+                <div class="text-danger"
+                  *ngIf="beneficiarioForm.get('nome_pai').invalid && beneficiarioForm.get('nome_pai').touched">
+                  <div *ngIf="beneficiarioForm.get('nome_pai').errors.required">dado obrigatório</div>
+                </div>
+              </div>
+
+              <div class="form-group col-md-6">
+                <label class="form-control-label">Nome da Mãe</label>
+                <input type="text" placeholder="Nome completo da mãe" class="form-control" formControlName="nome_mae" />
+
+                <div class="text-danger"
+                  *ngIf="beneficiarioForm.get('nome_mae').invalid && beneficiarioForm.get('nome_mae').touched">
+                  <div *ngIf="beneficiarioForm.get('nome_mae').errors.required">dado obrigatório</div>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label class="form-control-label">Nome do Responsável pelo Beneficiário <span
+                    class="text-danger">*</span></label>
+                <input type="text" placeholder="Nome completo do responsável" class="form-control"
+                  formControlName="nome_responsavel" />
+
+                <div class="text-danger"
+                  *ngIf="beneficiarioForm.get('nome_responsavel').invalid && beneficiarioForm.get('nome_responsavel').touched">
+                  <div *ngIf="beneficiarioForm.get('nome_responsavel').errors.required">dado obrigatório</div>
+                </div>
+              </div>
+
+              <div class="form-group col-md-6">
+                <label class="form-control-label">Grau do parentesco <span class="text-danger">*</span></label>
+
+                <ng-select [items]="listaDeParentesco" bindLabel="title" bindValue="value"
+                  placeholder="Grau de parentesco (Pai, Mãe, Avô...)" [multiple]="false"
+                  formControlName="grau_parentesco_responsavel">
+
+                </ng-select>
+
+                <div class="text-danger"
+                  *ngIf="beneficiarioForm.get('grau_parentesco_responsavel').invalid && beneficiarioForm.get('grau_parentesco_responsavel').touched">
+                  <div *ngIf="beneficiarioForm.get('grau_parentesco_responsavel').errors.required">dado obrigatório
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="form-row">
+              <div class="form-group col-md-3">
+                <label class="form-control-label">Telefone</label>
+                <input type="tel" mask="(00) 0000-0000" placeholder="(00) 0000-0000" class="form-control"
+                  formControlName="telefone" />
+
+                <div class="text-danger"
+                  *ngIf="beneficiarioForm.get('telefone').invalid && beneficiarioForm.get('telefone').touched">
+                  <div *ngIf="beneficiarioForm.get('telefone').errors.required">dado obrigatório</div>
+                </div>
+              </div>
+
+              <div class="form-group col-md-3">
+                <label class="form-control-label">Celular</label>
+                <input type="text" mask="(00)00000-0000" placeholder="(00) 00000-0000" class="form-control"
+                  formControlName="celular" />
+
+                <div class="text-danger"
+                  *ngIf="beneficiarioForm.get('celular').invalid && beneficiarioForm.get('celular').touched">
+                  <div *ngIf="beneficiarioForm.get('celular').errors.required">dado obrigatório</div>
+                </div>
+              </div>
+
+              <div class="form-group col-md-6">
+                <label class="form-control-label">Email</label>
+                <input type="text" placeholder="Informe um email válido" class="form-control" formControlName="email" />
+
+                <div class="text-danger"
+                  *ngIf="beneficiarioForm.get('email').invalid && beneficiarioForm.get('email').touched">
+                  <div *ngIf="beneficiarioForm.get('email').errors.required">dado obrigatório</div>
+                  <div *ngIf="beneficiarioForm.get('email').errors.email">Formato inválido de email</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group col-md-3">
+                <label class="form-control-label">Participa do Projeto PJP?<span class="text-danger">*</span></label>
+                <select class="form-control" formControlName="pjp">
+                  <option [ngValue]="true">Sim</option>
+                  <option [ngValue]="false">Não</option>
+                </select>
+              </div>
+
+              <div class="form-group col-md-3" *ngIf="!beneficiarioForm.get('pjp').value">
+                <label class="form-control-label">Série/Ano<span class="text-danger">*</span></label>
+                <select class="form-control" formControlName="serie_id">
+                  <option *ngFor="let s of listaSeries" [ngValue]="s.id">{{s.nome}}</option>
+                </select>
+              </div>
+            </div>
+
+
+          <div class="form-row" *ngIf="beneficiarioForm.get('pjp').value">
+              <div class="form-group col-md-6">
+                <label class="form-control-label">Deficiência - PJP</label>
+
+                <ng-select [items]="deficiencias" bindLabel="tipo" bindValue="id"
+                  placeholder="Selecione a(s) deficiência(s)" [multiple]="true" formControlName="deficiencias">
+
+                </ng-select>
+              </div>
+
+
+              <!-- Autorizacao Medica -->
+              <div class="col-md-6">
+                
+                <div class="form-group" *ngIf="beneficiarioForm.get('deficiencias').value && beneficiarioForm.get('deficiencias').value.length">
+                  <label class="form-control-label">Autorização Médica (Somente .PDF)</label>
+                  <div class="mb-2"
+                    *ngIf="currentAction === 'edit' &&  documentos['autMed'] &&  documentos['autMed'].length > 0">
+                    <button type="button" class="btn btn-sm btn-primary"
+                      (click)="DownloadFile('autMed', documentos['autMed'][0])">Clique aqui para baixar autorização
+                      médica enviada</button>
+                  </div>
+                  <input type="file" class="form-control-file" formControlName="documento_autorizacao_medica_pjp"
+                    (change)="selectFileAutorizacaoMedica($event)" accept=".pdf"/>
+                    <div class="text-danger" *ngIf="fileInputHasErrorAutorizacaoMedica()">Selecione um arquivo PDF válido.</div>
+                </div>
+
+              </div>
+              <!-- Fim Autorizaçao Médica -->
+
+              
+            </div>
+
+
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label class="form-control-label">Escolha o núcleo <span class="text-danger">*</span></label>
+
+                <ng-select [items]="nucleos" bindLabel="descricao" bindValue="id" placeholder="Escolha o núcleo"
+                  formControlName="nucleo_id" (change)="SelecionaDiaTurnoNuclecoSelecionado($event)">
+
+                  <ng-template ng-option-tmp let-item="item">
+                    <img src="assets/img/bandeiras_estados/{{item.uf}}.jpg" width="24" height="16" class='border' />
+                    {{item.descricao}} - {{item.municipio}} ({{item.uf}})
+                  </ng-template>
+
+                  <ng-template ng-label-tmp let-item="item">
+                    <img src="assets/img/bandeiras_estados/{{item.uf}}.jpg" width="24" height="16" class='border' />
+                    {{item.descricao}} - {{item.municipio}} ({{item.uf}})
+                  </ng-template>
+
+                </ng-select>
+
+
+
+
+
+                <div class="text-danger"
+                  *ngIf="beneficiarioForm.get('nucleo_id').invalid && beneficiarioForm.get('nucleo_id').touched">
+                  <div *ngIf="beneficiarioForm.get('nucleo_id').errors.required">dado obrigatório</div>
+                </div>
+              </div>
+
+
+
+              <!-- A parte dos dias e turnos de funcionamento serão montada diretamente no tamplete do angualar-->
+
+              <div class="form-group col-md-6" *ngIf="beneficiarioForm.get('nucleo_id').valid">
+                <label class="form-control-label">Selecione dia(s) e turno do núcleo<span
+                    class="text-danger">*</span></label>
+
+                <ng-select [items]="dia_turno_nucleos" bindLabel="descricao" bindValue="id" [multiple]="true"
+                  placeholder="Escolha os dia(s) e turno(s)" formControlName="frequencia_nucleo">
+                </ng-select>
+
+                <div class="text-danger"
+                  *ngIf="beneficiarioForm.get('frequencia_nucleo').invalid && beneficiarioForm.get('frequencia_nucleo').touched">
+                  <div *ngIf="beneficiarioForm.get('frequencia_nucleo').errors.required">dado obrigatório</div>
+                  <div *ngIf="beneficiarioForm.get('frequencia_nucleo').errors.frequencia">Verifique a frequência do
+                    beneficiário para evitar turnos seguidos no mesmo dia!</div>
+                  <div *ngIf="beneficiarioForm.get('frequencia_nucleo').errors.frequencia">
+                    {{beneficiarioForm.get('frequencia_nucleo').errors.msg}}</div>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label class="form-control-label">Escolha uma escola<span class="text-danger">*</span></label>
+
+                <ng-select [items]="escolas" bindLabel="nome" bindValue="id" [(ngModel)]="escolaDefault"
+                  placeholder="Digite ao menos 3 letras para a busca..." formControlName="escola_id"
+                  (search)="changeEscola($event)">
+
+                  <ng-template ng-option-tmp let-item="item">
+                    <img src="assets/img/bandeiras_estados/{{item.uf}}.jpg" width="24" height="16" class='border' />
+                    {{item.nome}} - {{item.municipio}} ({{item.uf}})
+                  </ng-template>
+
+                </ng-select>
+
+                <div class="text-danger"
+                  *ngIf="beneficiarioForm.get('escola_id').invalid && beneficiarioForm.get('escola_id').touched">
+                  <div *ngIf="beneficiarioForm.get('escola_id').errors.required">dado obrigatório</div>
+                </div>
+              </div>
+
+              <div class="form-group col-md-6">
+                <label class="form-control-label">Caso não esteja na lista, cadastre a escola:</label> <br>
+                <button [disabled]="!beneficiarioForm.get('escola_id').invalid" nf
+                  class="btn btn-outline-primary button-escola" (click)="openCadastroEscola()">Cadastrar Escola
+                </button>
+              </div>
+
+            </div>
+
+            <!-- Campo para doc da autorização do direito de imagem -->
+            <div class="form-row">
+
+              <div class="form-group col-md-6">
+                <label class="form-control-label">Autorização de Imagem</label>
+                <div class="mb-2" *ngIf="currentAction === 'edit' && documentos['autImg'] && documentos['autImg'].length > 0">
+                  <button type="button" class="btn btn-sm btn-primary"
+                  (click)="DownloadFile('autImg', documentos['autImg'][0])">Clique aqui para baixar autorização de
+                  imagem enviada</button>
+                </div>
+                <input type="file" class="form-control-file" formControlName="documento_autorizacao_imagem"
+                  (change)="selectFileAutorizacaoImagem($event)" accept=".pdf"/>
+                  <div class="text-danger" *ngIf="fileInputHasErrorAutorizacaoImagem()">Selecione um arquivo PDF válido.</div>
+              </div>
+
+              <div class="form-group col-md-6">
+                <label class="form-control-label">Modelo de Autorização de Imagem</label> <br>
+                <a href="assets/docs/Termo de Autorização - PROFESP-PJP.docx" target="_blank"
+                  class="btn btn-outline-primary w-100p mb-1 mr-1">Download</a>
+              </div>
+
+
+              <div class="form-group col-md-6">
+                <label class="form-control-label">Data de Ingresso <span class="text-danger">*</span></label>
+                <input type="date" class="form-control" formControlName="data_ingresso" />
+
+                <div class="text-danger"
+                  *ngIf="beneficiarioForm.get('data_ingresso').invalid && beneficiarioForm.get('data_ingresso').touched">
+                  <div *ngIf="beneficiarioForm.get('data_ingresso').errors.required">dado obrigatório</div>
+                </div>
+              </div>
+
+            </div>
+            
+
+            <div class="row pl-3">
+              <button [disabled]="submittingForm || beneficiarioForm.invalid" (click)="saveBeneficiario()"
+                class="btn btn-primary btn-lg float-left mt-3">
+                Salvar Beneficiário
+              </button>
+            </div>
+
+          </form>
+          <!--Término do Formulário-->
+
+
+
+          <!--Início do Formulário-->
+          <form *ngIf="step.name=='Endereço'" [formGroup]="enderecoForm">
+
+
+            <div class="form-row">
+              <div class="form-group col-md-2">
+                <label class="form-control-label">CEP</label>
+                <input type="text" class="form-control" formControlName="cep" [mask]="maskCEP" (blur)="getBuscarCep()">
+                <div class="text-danger" *ngIf="enderecoForm.get('cep').invalid && enderecoForm.get('cep').touched">
+                  <div *ngIf="enderecoForm.get('cep').errors.required">Dado obrigatório</div>
+                </div>
+              </div>
+              <div class="form-group col-md-1">
+                <label for="inputBusca"></label><br>
+                <button type="button" class="btn btn-outline-dark btn-sm float-left mt-2" (click)="getBuscarCep()">
+                  <i class="fa fa-search"></i>
+                </button>
+
+              </div>
+
+            </div>
+
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label class="form-control-label">Logradouro</label>
+                <input type="text" placeholder="Logradouro" class="form-control" formControlName="logradouro" />
+              </div>
+
+
+
+              <div class="form-group col-md-6">
+                <label class="form-control-label">Complemento</label>
+                <input type="text" placeholder="Complemento" class="form-control" formControlName="complemento" />
+              </div>
+            </div>
+
+
+            <div class="form-row">
+
+              <div class="form-group col-md-4">
+                <label class="form-control-label">Localidade</label>
+                <input type="text" placeholder="Localidade" class="form-control" formControlName="localidade" />
+              </div>
+
+
+              <div class="form-group col-md-2">
+                <label class="form-control-label">UF </label>
+
+                <select class="form-control" formControlName="uf">
+                  <option value="AC">Acre</option>
+                  <option value="AL">Alagoas</option>
+                  <option value="AP">Amapá</option>
+                  <option value="AM">Amazonas</option>
+                  <option value="BA">Bahia</option>
+                  <option value="CE">Ceará</option>
+                  <option value="DF">Distrito Federal</option>
+                  <option value="ES">Espírito Santo</option>
+                  <option value="GO">Goiás</option>
+                  <option value="MA">Maranhão</option>
+                  <option value="MT">Mato Grosso</option>
+                  <option value="MS">Mato Grosso do Sul</option>
+                  <option value="MG">Minas Gerais</option>
+                  <option value="PA">Pará</option>
+                  <option value="PB">Paraíba</option>
+                  <option value="PR">Paraná</option>
+                  <option value="PE">Pernambuco</option>
+                  <option value="PI">Piauí</option>
+                  <option value="RJ">Rio de Janeiro</option>
+                  <option value="RN">Rio Grande do Norte</option>
+                  <option value="RS">Rio Grande do Sul</option>
+                  <option value="RO">Rondônia</option>
+                  <option value="RR">Roraima</option>
+                  <option value="SC">Santa Catarina</option>
+                  <option value="SP">São Paulo</option>
+                  <option value="SE">Sergipe</option>
+                  <option value="TO">Tocantins</option>
+                </select>
+
+
+                <div class="text-danger"
+                  *ngIf="beneficiarioForm.get('nucleo_id').invalid && beneficiarioForm.get('nucleo_id').touched">
+                  <div *ngIf="beneficiarioForm.get('nucleo_id').errors.required">dado obrigatório</div>
+                </div>
+              </div>
+
+
+
+              <div class="form-group col-md-4">
+                <label class="form-control-label">Bairro</label>
+                <input type="text" placeholder="Bairro" class="form-control" formControlName="bairro" />
+              </div>
+
+              <div class="form-group col-md-2">
+                <label class="form-control-label">Número</label>
+                <input type="number" placeholder="Número" class="form-control" formControlName="numero" />
+              </div>
+
+
+            </div>
+
+            <div class="row pl-3">
+              <button [disabled]="submittingForm || enderecoForm.invalid" (click)="saveEndereco()"
+                class="btn btn-primary btn-lg float-left mt-3">
+                Salvar Endereço
+              </button>
+            </div>
+
+          </form>
+          <!--Término do Formulário-->
+
+
+
+          <!--Início do Formulário-->
+          <form *ngIf="step.name=='Uniforme'" [formGroup]="uniformeForm">
+            <div class="form-row">
+
+
+              <div class="form-group col-md-3">
+                <label class="form-control-label">Tamanho da Camiseta</label>
+                <button type="button" class="badge badge-nitido badge-info mr-1" data-toggle="modal"
+                  data-target="#medidas_camisetas">Tabela de Tamanhos</button>
+                <ng-select [items]="tamanhos" [multiple]="false" placeholder="Escolha o tamanho"
+                  formControlName="tamanho_camisa">
+                </ng-select>
+
+                <div class="text-danger"
+                  *ngIf="uniformeForm.get('tamanho_camisa').invalid && uniformeForm.get('tamanho_camisa').touched">
+                  <div *ngIf="uniformeForm.get('tamanho_camisa').errors.required">dado obrigatório</div>
+                </div>
+              </div>
+
+              <div class="form-group col-md-3">
+                <label class="form-control-label">Tamanho da Calça</label>
+                <button type="button" class="badge badge-nitido badge-info mr-1" data-toggle="modal"
+                  data-target="#medidas_calcas">Tabela de Tamanhos</button>
+                <ng-select [items]="tamanhos" [multiple]="false" placeholder="Escolha o tamanho"
+                  formControlName="tamanho_calca">
+                </ng-select>
+
+                <div class="text-danger"
+                  *ngIf="uniformeForm.get('tamanho_calca').invalid && uniformeForm.get('tamanho_calca').touched">
+                  <div *ngIf="uniformeForm.get('tamanho_calca').errors.required">dado obrigatório</div>
+                </div>
+              </div>
+
+              <div class="form-group col-md-2">
+                <label class="form-control-label">Tamanho do Tênis</label>
+
+                <input type="number" placeholder="Tamanho do Tênis" class="form-control"
+                  formControlName="tamanho_tenis" />
+
+                <div class="text-danger"
+                  *ngIf="uniformeForm.get('tamanho_tenis').invalid && uniformeForm.get('tamanho_tenis').touched">
+                  <div *ngIf="uniformeForm.get('tamanho_tenis').errors.required">dado obrigatório</div>
+                </div>
+              </div>
+
+
+              <div class="form-group col-md-3">
+                <label class="form-control-label">Tamanho do Abrigo</label>
+                <button type="button" class="badge badge-nitido badge-info mr-1" data-toggle="modal"
+                  data-target="#medidas_abrigos">Tabela de Tamanhos</button>
+
+                <ng-select [items]="tamanhos" [multiple]="false" placeholder="Escolha o tamanho"
+                  formControlName="tamanho_abrigo">
+                </ng-select>
+
+                <div class="text-danger"
+                  *ngIf="uniformeForm.get('tamanho_abrigo').invalid && uniformeForm.get('tamanho_abrigo').touched">
+                  <div *ngIf="uniformeForm.get('tamanho_abrigo').errors.required">dado obrigatório</div>
+                </div>
+              </div>
+
+
+            </div>
+
+
+            <div class="form-row">
+
+              <div class="form-group col-md-3">
+                <label class="form-control-label">Tamanho do Short</label>
+                <button type="button" class="badge badge-nitido badge-info mr-1" data-toggle="modal"
+                  data-target="#medidas_shorts">Tabela de Tamanhos</button>
+                <ng-select [items]="tamanhos" [multiple]="false" placeholder="Escolha o tamanho"
+                  formControlName="tamanho_short">
+                </ng-select>
+
+                <div class="text-danger"
+                  *ngIf="uniformeForm.get('tamanho_short').invalid && uniformeForm.get('tamanho_short').touched">
+                  <div *ngIf="uniformeForm.get('tamanho_short').errors.required">dado obrigatório</div>
+                </div>
+              </div>
+              <div class="form-group col-md-3">
+                <label class="form-control-label">Tamanho do Boné: <br>Único</label>
+              </div>
+
+              <div class="form-group col-md-3">
+                <label class="form-control-label">Tamanho da Meia: <br>Única</label>
+              </div>
+
+            </div>
+
+            <div class="row pl-3">
+              <button [disabled]="submittingForm || uniformeForm.invalid" (click)="saveUniforme()"
+                class="btn btn-primary btn-lg float-left mt-3">
+                Salvar Uniforme
+              </button>
+            </div>
+
+          </form>
+
+        </div>
+
+
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="modal fade" id="medidas_calcas" tabindex="-1" role="dialog" aria-labelledby="modal-large-label"
+  style="display: none;">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header state modal-primary">
+        <h4 class="modal-title" id="modal-default-label">Padrão de Medidas das Calças</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+            aria-hidden="true">×</span></button>
+      </div>
+      <div class="modal-body figura">
+        <figure>
+          <img src="assets/img/beneficiarios/medidas_calcas.png" class="figura">
+        </figure>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="medidas_camisetas" tabindex="-1" role="dialog" aria-labelledby="modal-large-label"
+  style="display: none;">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header state modal-primary">
+        <h4 class="modal-title" id="modal-default-label">Padrão de Medidas das Camisetas</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+            aria-hidden="true">×</span></button>
+      </div>
+      <div class="modal-body figura">
+        <figure>
+          <img src="assets/img/beneficiarios/medidas_camisetas.png" class="figura">
+        </figure>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="medidas_shorts" tabindex="-1" role="dialog" aria-labelledby="modal-large-label"
+  style="display: none;">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header state modal-primary">
+        <h4 class="modal-title" id="modal-default-label">Padrão de Medidas dos Shorts</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+            aria-hidden="true">×</span></button>
+      </div>
+      <div class="modal-body figura">
+        <figure>
+          <img src="assets/img/beneficiarios/medidas_shorts.png" class="figura">
+        </figure>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="medidas_abrigos" tabindex="-1" role="dialog" aria-labelledby="modal-large-label"
+  style="display: none;">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header state modal-primary">
+        <h4 class="modal-title" id="modal-default-label">Padrão de Medidas dos Abrigos</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+            aria-hidden="true">×</span></button>
+      </div>
+      <div class="modal-body figura">
+        <figure>
+          <img src="assets/img/beneficiarios/medidas_abrigos.png" class="figura">
+        </figure>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+
+      </div>
+    </div>
+  </div>
+</div>

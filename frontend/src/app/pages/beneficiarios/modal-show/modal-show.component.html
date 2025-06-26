@@ -1,0 +1,255 @@
+<div class="modal-body bg-gray">
+  <div class="row justify-content-end">
+    <div class="col"></div>
+    <div class="col-auto">
+      <!-- Botão alinhado à direita -->
+      <button type="button" class="close ml-auto" aria-label="Fechar" (click)="activeModal.dismiss()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12 vertical-tabs">
+      <div class="row px-3">
+
+
+        <ul class="nav flex-column left col-3 border-3 rounded-0 mr-0 bg-light">
+
+          <!-- <img class="w-100" src="assets/img/users/default-user.jpg">      -->
+
+          <form [formGroup]="avatarForm">
+            <div class="personal-image">
+              <label class="label">
+                <input type="file" formControlName="avatar" (change)="selectFiles($event)" />
+                <figure class="personal-figure">
+                  <img [src]="avatarImage" class="personal-avatar" alt="avatar">
+                  <figcaption class="personal-figcaption">
+                    <img src="assets/img/camera-white.png">
+                  </figcaption>
+                </figure>
+              </label>
+            </div>
+          </form>
+
+
+          <li class="nav-item bg-light">
+            <a class="nav-link active" href="#basic" data-toggle="tab">Básico</a>
+          </li>
+          <li class="nav-item bg-light">
+            <a class="nav-link" href="#contato" data-toggle="tab">Contato</a>
+          </li>
+
+          <li class="nav-item bg-light">
+            <a class="nav-link" href="#local" data-toggle="tab">Local</a>
+          </li>
+
+          <li class="nav-item bg-light">
+            <a class="nav-link" href="#endereco" data-toggle="tab">Endereço</a>
+          </li>
+
+
+          <li class="nav-item bg-light">
+            <a class="nav-link" href="#documentos" data-toggle="tab">Documentos</a>
+          </li>
+
+          <li class="nav-item bg-light">
+            <a class="nav-link" href="#pjp" data-toggle="tab">PJP</a>
+          </li>
+
+          <li class="nav-item bg-light">
+            <a class="nav-link" href="#historico" data-toggle="tab">Histórico</a>
+          </li>
+
+        </ul>
+
+        <div class="tab-content col-9 border-0">
+          <div class="tab-pane active" id="basic">
+            <div class="form-group">
+
+              <label class="text-gray">Id: </label><br>
+              {{beneficiario.id}}
+              <br>
+
+              <label class="text-gray">Nome completo: </label><br>
+              {{beneficiario.nome_completo}}
+              <br>
+
+              <label class="text-gray">CPF: </label><br>
+              {{beneficiario.cpf}}<br>
+
+              <label class="text-gray">Data de Nascimento: </label><br>
+              {{beneficiario.data_nascimento | date:"dd/MM/yyyy"}}
+              <br>
+
+              <label class="text-gray">Nome da Mãe: </label><br>
+              {{beneficiario.nome_mae}}<br>
+
+              <label class="text-gray">Nome do Pai: </label><br>
+              {{beneficiario.nome_pai}}<br>
+
+              <label class="text-gray">Nome do Responsável: </label><br>
+              {{beneficiario.nome_responsavel}}<br>
+
+            </div>
+
+          </div>
+
+
+          <div class="tab-pane" id="contato">
+            <div class="form-group">
+              <label class="text-gray">Telefone: </label><br>
+              {{beneficiario.telefone}} <br>
+              <label class="text-gray">Email: </label> <br>
+              {{beneficiario.email}}
+
+            </div>
+          </div>
+
+          <div class="tab-pane" id="local">
+            <div class="form-group">
+              <label class="text-gray">Região: </label><br>
+              {{beneficiario.nucleo.regiao}}<br>
+
+              <label class="text-gray">Estado: </label><br>
+              {{beneficiario.nucleo.uf}}<br>
+
+              <label class="text-gray">Municipio: </label><br>
+              {{beneficiario.nucleo.municipio}}<br>
+
+              <label class="text-gray">Núcleo: </label><br>
+              {{beneficiario.nucleo.descricao}}<br>
+
+            </div>
+          </div>
+
+          <div class="tab-pane" id="endereco">
+            <div class="row">
+              <div class="col-sm-6">
+                <label class="text-gray">CEP: </label><br>
+                {{beneficiario?.endereco?.cep}}<br>
+              </div>
+              <div class="col-sm-6">
+                <label class="text-gray">UF: </label><br>
+                {{beneficiario?.endereco?.uf}}<br>
+              </div>
+              <div class="col-sm-6">
+                <label class="text-gray">Localidade: </label><br>
+                {{beneficiario?.endereco?.localidade}}<br>
+              </div>
+              <div class="col-sm-6">
+                <label class="text-gray">Bairro: </label><br>
+                {{beneficiario?.endereco?.bairro}}<br>
+              </div>
+            </div>
+
+            <div class="mt-2">
+
+              <label class="text-gray">Logradouro: </label><br>
+              {{beneficiario?.endereco?.logradouro}}<br>
+
+              <label class="text-gray">Complemento: </label><br>
+              {{beneficiario?.endereco?.complemento}}<br>
+
+              <label class="text-gray">Nº: </label><br>
+              {{beneficiario?.endereco?.numero}}<br>
+
+
+
+            </div>
+          </div>
+
+
+
+          <div class="tab-pane" id="documentos">
+            <div class="row">
+              <div class="col">
+
+                <div class="personal-image"
+                  *ngIf="docBeneficiarios && docBeneficiarios.autImg  && docBeneficiarios.autImg.length">
+                  <label class="label">
+                    <figure class="personal-figure">
+                      <img (click)="DownloadFile(beneficiario.id, 'autImg', docBeneficiarios.autImg[0])"
+                        src="assets/img/doc-icon.png" class="personal-avatar" alt="avatar">
+                      Autorização de Imagem
+                    </figure>
+                  </label>
+                </div>
+
+
+              </div>
+              <div class="col">
+
+
+                <div class="personal-image"
+                  *ngIf="docBeneficiarios && docBeneficiarios.autMed && docBeneficiarios.autMed.length">
+                  <label class="label">
+                    <figure class="personal-figure">
+                      <img (click)="DownloadFile(beneficiario.id, 'autMed', docBeneficiarios.autMed[0])"
+                        src="assets/img/medical_document_icon.png" class="personal-avatar" alt="avatar">
+                      Autorização Médica
+                    </figure>
+                  </label>
+                </div>
+
+
+              </div>
+            </div>
+
+
+
+          </div>
+          <div class="tab-pane" id="pjp">
+            <div class="form-group">
+
+              <label class="text-gray">PJP: </label><br>
+              {{beneficiario?.deficiencias?.length}}
+
+              <br>
+              <label class="text-gray">Tipo de PJP: </label>
+              <div *ngIf="beneficiario?.deficiencias.length == 0"> Nenhum(a) </div>
+              <div *ngIf="beneficiario?.deficiencias.length > 0">
+                <div *ngFor="let deficiencia of beneficiario?.deficiencias"> {{deficiencia?.tipo}} </div>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="tab-pane" id="historico">
+            <h5 class="text-center">Histórico</h5>
+            <p class="text-gray text-center">
+              Ciclo do Beneficiário no Programa.
+            </p>
+            <small class="text-center form-text text-muted">Novo registro criado a cada desativação do
+              beneficiário.</small>
+
+            <div *ngIf="beneficiario?.historicos && beneficiario?.historicos?.length">
+              <table class="table table-bordered">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Início</th>
+                    <th>Término</th>
+                    <th>Justificativa</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let historico of beneficiario.historicos">
+                    <td>{{historico.inicio_ingresso | date:"dd/MM/yyyy"}}</td>
+                    <td>{{historico.termino_ingresso | date:"dd/MM/yyyy"}}</td>
+                    <td>{{historico.justificativa}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+
+
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

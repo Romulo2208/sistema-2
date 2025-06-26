@@ -1,0 +1,32 @@
+<div class="card">
+    <div class="card-header">
+      Seja Bem Vindo(a) ao Sistema, <b>{{user().name}}</b> !
+    </div>
+  </div>
+<br>
+
+<div class="row">
+  <div class="col-lg-12 mb-4">
+      <app-grafico-beneficiarios>Carregando...</app-grafico-beneficiarios>
+  </div>
+</div>
+
+<div class="row" *ngIf="showBeneficiariosAcesso()">
+  <div class="col-lg-12 mb-4">
+      <app-grafico-beneficiarios-acesso>Carregando...</app-grafico-beneficiarios-acesso>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-lg-12 mb-4">
+      <app-grafico-regioes>Carregando...</app-grafico-regioes>
+  </div>  
+</div>
+
+<div class="row">
+  <div class="col-lg-12 mb-4">
+      <app-grafico-nucleos>Carregando...</app-grafico-nucleos>
+  </div>  
+</div>
+ 

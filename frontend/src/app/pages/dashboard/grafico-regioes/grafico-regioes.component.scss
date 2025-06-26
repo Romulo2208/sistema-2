@@ -1,0 +1,17 @@
+.textDataLabel{
+    transform: rotate(0deg);
+    /* Safari */
+    -webkit-transform: rotate(0deg);
+
+    /* Firefox */
+    -moz-transform: rotate(0deg);
+
+    /* IE */
+    -ms-transform: rotate(0deg);
+
+    /* Opera */
+    -o-transform: rotate(0deg);
+
+    /* Internet Explorer */
+    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+}

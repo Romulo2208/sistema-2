@@ -1,0 +1,40 @@
+@import "../../../theme/styles/variables";
+
+.sidebar-outer{
+    height: 100%; 
+    width: $sidebar-width;
+    
+    .logo{
+        height: $top-navbar-height;
+        padding: 0 14px;
+        width: $sidebar-width;
+    }   
+    
+}
+.app.blue .sidebar-outer{
+    background:linear-gradient(0deg, rgba(62, 80, 180, 0.9), rgba(62, 80, 180, 0.9)), url("/assets/img/gladio_2d_azul.png") no-repeat center center;
+    background-size: 100%;
+} 
+
+
+
+// @media (max-width: 768px){
+//     .sidebar-outer .logo{
+//         width: 50px;
+//          .start{
+//                 display: none;
+//             }
+//     }
+// }
+
+
+
+
+// .collapsing {
+// //   position: relative;
+// //   height: 0;
+// //   overflow: hidden;
+//   -webkit-transition: height .15s ease;
+//        -o-transition: height .15s ease;
+//           transition: height .15s ease;
+// }

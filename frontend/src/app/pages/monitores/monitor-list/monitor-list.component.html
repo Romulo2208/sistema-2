@@ -1,0 +1,26 @@
+<div widget class="card border-0 box-shadow">
+  <div class="card-header transparent border-0 text-muted">
+    <div class="widget-controls">
+      <a data-widgster="expand" href="#" class="transition"><i class="fa fa-chevron-down"></i></a>
+      <a data-widgster="collapse" href="#" class="transition"><i class="fa fa-chevron-up"></i></a>
+      <a data-widgster="fullscreen" href="#" class="transition"><i class="fa fa-expand"></i></a>
+      <a data-widgster="restore" href="#" class="transition"><i class="fa fa-compress"></i></a>
+
+    </div>
+    <br><br>
+    <div class="">
+      <button class="btn btn-outline-danger pull-right" (click)="deleteBath($event)">
+        <i class="fa fa-trash text-danger"></i> Excluir em Massa
+      </button>
+    </div>
+  </div>
+
+  <div class="card-body pt-0 widget-body">
+    <p class="text-left fs-13 text-gray"> </p>
+    <div class="table-responsive">
+      <ng2-smart-table class="table table-hover tr-selecionavel" [settings]="settings" [source]="source"
+        (create)="onCreate($event)" (delete)="onDesativar($event)" (edit)="onEdit($event)" (userRowSelect)="onUserRowSelect($event)">
+      </ng2-smart-table>
+    </div>
+  </div>
+</div>

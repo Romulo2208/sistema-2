@@ -1,0 +1,77 @@
+<div widget class="card border-0 box-shadow">
+  <div class="card-header transparent border-0 text-muted">
+          
+  </div>
+  <div class="card-body pt-0 widget-body">
+      <p class="text-left fs-13 text-gray">  </p>
+      <div class="table-responsive">
+          <ng2-smart-table  class="table table-hover"
+                            [settings]="settings" 
+                            [source]="source" 
+                            (create)="onCreate($event)"
+                            (delete)="onDelete($event)"
+                            (custom)="onCustom($event, modalContent)" 
+                            (edit)="onEdit($event)">
+                          </ng2-smart-table>
+      </div>          
+  </div>
+</div>
+
+
+<ng-template #modalContent>
+  <div class="modal-body bg-gray">
+      <div class="row">
+          <div class="col-12 vertical-tabs">   
+            <div class="row px-3">
+            <ul class="nav flex-column left col-3 border-3 rounded-0 mr-0 bg-light">                     
+                            
+              <li class="nav-item bg-light">
+                  <a class="nav-link active" href="#basic" data-toggle="tab">Descrição</a>
+              </li>
+              
+        
+                          
+          </ul>
+          
+          <div class="tab-content col-9 border-0">
+            <div class="tab-pane active" id="basic">                                                
+                <div class="form-group">
+
+                  <label class="text-gray">Id: </label><br>
+                    {{nucleo.id}}
+                    <br>
+
+                    <label class="text-gray">Nome: </label><br>
+                    {{nucleo.descricao}}
+                    <br>
+
+                    <label class="text-gray">Região: </label><br>
+                    {{nucleo.regiao}}<br>
+
+                    <label class="text-gray">COMAR: </label><br>
+                    {{nucleo.comar}}<br>
+
+                    <label class="text-gray">UF: </label><br>
+                    {{nucleo.uf}}<br>
+
+
+                    <label class="text-gray">Municipio: </label><br>
+                    {{nucleo.municipio}}<br>
+
+                    <label class="text-gray">Funcionamento: </label>
+                      <ul>
+                        <li class="ml-4" *ngFor="let dia of nucleo.dia_turno_nucleos">{{dia.descricao}}</li>
+                      </ul>
+                </div>
+                                          
+            </div> 
+
+
+           
+
+          </div>
+        </div>              
+      </div>    
+    </div>
+  </div>
+</ng-template>

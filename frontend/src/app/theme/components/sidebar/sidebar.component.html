@@ -1,0 +1,9 @@
+<div class="sidebar-outer">
+    <a class="logo d-flex align-items-center" routerLink="/" (click)="closeSubMenus()" *ngIf="settings.theme.sidebarIsFixed">
+        <span class="start">PROFESP-FAB&nbsp; </span>
+        <span class="ng">
+            <img src="assets/img/logo_completa.png" width="35px"> 
+        </span>
+    </a>
+    <app-vertical-menu [menuItems]="menuItems"></app-vertical-menu>    
+</div>

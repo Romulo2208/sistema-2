@@ -1,0 +1,174 @@
+<div class="row">
+  <div class="col-md">
+    <div widget class="card border-0 box-shadow">
+      <div class="card-header transparent border-0 text-muted">
+        <h5 class="mb-0">{{pageTitle}}</h5>
+        <div class="widget-controls">
+          <a data-widgster="expand" href="#" class="transition"><i class="fa fa-chevron-down"></i></a>
+          <a data-widgster="collapse" href="#" class="transition"><i class="fa fa-chevron-up"></i></a>
+
+        </div>
+      </div>
+      <div class="card-body pt-0 widget-body">
+        <div class="row">
+          <div class=" col-md">
+            <a routerLink="/usuarios" class="btn btn-secondary float-right">
+              <i class="fa fa-arrow-left"></i> Voltar
+            </a>
+          </div>
+        </div>
+        <!--Início do Formulário-->
+        <form [formGroup]="userForm" (submit)="submitForm()">
+
+
+          <div class="form-row">
+            <div class="form-group col-md-2">
+              <label class="form-control-label">CPF</label>
+              <input type="text" mask="000.000.000-00" placeholder="000.000.000-00" class="form-control" formControlName="cpf" (blur)="getBuscarUsuario()">
+              
+            </div>
+            <div class="form-group col-md-1">
+              <label for="inputBusca"></label><br>
+              <button  type="button" class="btn btn-outline-dark btn-sm float-left mt-2"
+              (click)="getBuscarUsuario()">
+               <i class="fa fa-search"></i>
+          </button>
+             
+            </div>
+
+          </div>
+
+
+          <div class="form-row">
+
+            <div class="form-group col-md-8">
+              <label class="form-control-label">Nome Completo</label>
+              <input type="text" class="form-control" formControlName="name" [readonly]="isReadyOnly">
+              <div class="text-danger" *ngIf="userForm.get('name').invalid && userForm.get('name').touched">
+                <div *ngIf="userForm.get('name').errors.required">dado obrigatório</div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-md-4">
+              <label class="form-control-label">Email</label>
+              <input type="text" class="form-control" formControlName="email" [readonly]="isReadyOnly">
+              <div class="text-danger" *ngIf="userForm.get('email').invalid && userForm.get('email').touched">
+                <div *ngIf="userForm.get('email').errors.required">dado obrigatório</div>
+              </div>
+            </div>
+
+
+            <div class="form-group col-md-4">
+              <label class="form-control-label">Username</label>
+              <input type="text" class="form-control" formControlName="username" [readonly]="isReadyOnly">
+              <div class="text-danger" *ngIf="userForm.get('username').invalid && userForm.get('username').touched">
+                <div *ngIf="userForm.get('username').errors.required">dado obrigatório</div>
+              </div>
+            </div>
+          </div>
+
+          
+          <div class="form-row" *ngIf="currentAction === 'edit'">
+            <div class="form-group form-check">
+              <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" (click)="editPassword == true ? editPassword = false : editPassword = true">
+              <label class="form-check-label" for="flexCheckDefault">
+                Atualizar senha
+              </label>
+            </div>
+          </div>
+
+          <div class="form-row" *ngIf="editPassword">
+           
+            <div class="form-group col-md-4">
+              <label class="form-control-label">Senha</label>
+              <input type="password" class="form-control validation-field" formControlName="password" [readonly]="isReadyOnly">
+              <small class="text-danger" *ngIf="userForm.get('password').hasError('minlength')">Senha mínimo de 6 caracteres</small>
+            </div>
+
+            <div class="form-group col-md-4">
+              <label class="form-control-label">Re-Senha</label>
+              <input type="password" class="form-control validation-field" formControlName="password_confirmation" [readonly]="isReadyOnly">
+              <div class="text-danger" *ngIf="userForm.get('password_confirmation').invalid && userForm.get('password_confirmation').touched">
+                <small class="text-danger" *ngIf="userForm.get('password_confirmation').errors">As senhas devem ser iguais</small>
+              </div>
+            </div>
+          </div> 
+
+
+          <!-- <pre>
+            {{ list_roles | json}}
+          </pre> -->
+
+          <div class="form-row">
+            
+            <div class="form-group col-md-3">
+              <label class="form-control-label">Permissão de Acesso</label>
+              
+              <ng-select 
+                [items]="list_roles"
+                [multiple]="false"
+                bindValue="id"
+                bindLabel="name"
+                formControlName="roles">
+              </ng-select>
+
+              <div class="text-danger" *ngIf="userForm.get('roles').invalid && userForm.get('roles').touched">
+                <div *ngIf="userForm.get('roles').errors.required">dado obrigatório</div>
+              </div>
+
+            </div>
+
+            <div class="form-group col-md-3" *ngIf="userForm.get('roles').value >= 4">
+              <label class="form-control-label">Selecione o Comar</label>
+              
+              <ng-select 
+                [items]="list_comar"
+                [multiple]="true"
+                bindValue="id"
+                bindLabel="descricao"
+                (change)="loadNucleoByComar($event)"
+                formControlName="comars">
+              </ng-select>
+
+              <div class="text-danger" *ngIf="userForm.get('comars').invalid && userForm.get('comars').touched">
+                <div *ngIf="userForm.get('comars').errors.required">dado obrigatório</div>
+              </div>
+
+            </div>
+
+
+            <div class="form-group col-md-3" *ngIf="userForm.get('roles').value >= 5 && !!userForm.get('comars').value">
+              <label class="form-control-label">Selecione os núcleo</label>
+            <!-- {{ list_nucleos_by_comar | json}} -->
+              <ng-select 
+                [items]="list_nucleos_by_comar"
+                [multiple]="true"
+                bindValue="id"
+                bindLabel="descricao"
+                formControlName="nucleos">
+              </ng-select>
+
+              <div class="text-danger" *ngIf="userForm.get('nucleos').invalid && userForm.get('nucleos').touched">
+                <div *ngIf="userForm.get('nucleos').errors.required">dado obrigatório</div>
+              </div>
+
+            </div>
+
+          </div>
+
+
+          
+            <button [disabled]="userForm.invalid" type="submit"
+              class="btn btn-primary btn-lg float-left mt-3">
+              Salvar
+            </button>
+        </form>
+        <!--Término do Formulário-->
+      </div>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,133 @@
+<div class="row">
+  <div class="col-lg-12">
+      <div widget class="card border-0 box-shadow">
+            <div class="card-header transparent border-0 text-muted">
+                <h5 class="mb-0">Cadastro de Escola</h5>
+                        
+            </div>
+              <div class="card-body pt-0 widget-body"> 
+                  <p class="text-left fs-13 text-gray">Se a escola que você escolheu não estava na lista, cadastre-a.</p>
+                  
+                  <form  [formGroup]="escolaForm">
+                    <div class="row">
+                          <div class="form-group col-sm-6">
+                            <label for="nome">Nome</label>
+                            <input type="text" class="form-control" formControlName="nome" id="nome" placeholder="Digite o nome da escola...">
+                            <div class="text-danger" *ngIf="escolaForm.get('nome').invalid && escolaForm.get('nome').touched">
+                              <div *ngIf="escolaForm.get('nome').errors.required">dado obrigatório</div>
+                            </div>
+                          </div>
+
+                          <div class="form-group" class="col-sm-6">
+                            <label for="endereco">Endereço</label>
+                            <input type="text" class="form-control" formControlName="localidade" id="localidade" placeholder="Digite o endereço da escola...">
+                            <div class="text-danger" *ngIf="escolaForm.get('localidade').invalid && escolaForm.get('localidade').touched">
+                              <div *ngIf="escolaForm.get('localidade').errors.required">dado obrigatório</div>
+                            </div>
+                          </div>
+
+                    </div>
+
+                    <div class="row">
+                               <div class="form-group col-sm-6">
+                                  <label for="pais">País</label>
+                                  <input type="text" class="form-control" formControlName="pais" id="pais" placeholder="Ex.: Brasil, Portugal, Argentina">
+                                  <div class="text-danger" *ngIf="escolaForm.get('pais').invalid && escolaForm.get('pais').touched">
+                                    <div *ngIf="escolaForm.get('pais').errors.required">dado obrigatório</div>
+                                  </div>
+                                </div>
+
+                                <div class="form-group col-sm-6">
+                                  <label for="regiao">Região</label>                                
+                                        <ng-select [items]="regioes"                   
+                                        [multiple]="false"
+                                        placeholder="Ex.: Centro-Oeste, Sul, Sudeste..."
+                                        formControlName="regiao">
+                                        </ng-select>
+
+                                  <div class="text-danger" *ngIf="escolaForm.get('regiao').invalid && escolaForm.get('regiao').touched">
+
+                                    <div *ngIf="escolaForm.get('regiao').errors.required">dado obrigatório</div>
+                                  </div>
+                                </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="form-group col-sm-3">
+                      <label class="form-control-label">UF </label>
+                            
+                            <select class="form-control" formControlName="uf" >
+                              <option value="AC">Acre</option>
+                              <option value="AL">Alagoas</option>
+                              <option value="AP">Amapá</option>
+                              <option value="AM">Amazonas</option>
+                              <option value="BA">Bahia</option>
+                              <option value="CE">Ceará</option>
+                              <option value="DF">Distrito Federal</option>
+                              <option value="ES">Espírito Santo</option>
+                              <option value="GO">Goiás</option>
+                              <option value="MA">Maranhão</option>
+                              <option value="MT">Mato Grosso</option>
+                              <option value="MS">Mato Grosso do Sul</option>
+                              <option value="MG">Minas Gerais</option>
+                              <option value="PA">Pará</option>
+                              <option value="PB">Paraíba</option>
+                              <option value="PR">Paraná</option>
+                              <option value="PE">Pernambuco</option>
+                              <option value="PI">Piauí</option>
+                              <option value="RJ">Rio de Janeiro</option>
+                              <option value="RN">Rio Grande do Norte</option>
+                              <option value="RS">Rio Grande do Sul</option>
+                              <option value="RO">Rondônia</option>
+                              <option value="RR">Roraima</option>
+                              <option value="SC">Santa Catarina</option>
+                              <option value="SP">São Paulo</option>
+                              <option value="SE">Sergipe</option>
+                              <option value="TO">Tocantins</option>
+                            </select>
+                      </div>
+
+                      <div class="form-group col-sm-3">
+                        <label for="municipio">Município</label>
+                        <input type="text" formControlName="municipio" class="form-control" id="municipio" placeholder="Ex.: Goiânia, Cuiabá, ...">
+                        <div class="text-danger" *ngIf="escolaForm.get('municipio').invalid && escolaForm.get('municipio').touched">
+                          <div *ngIf="escolaForm.get('municipio').errors.required">dado obrigatório</div>
+                        </div>
+                      </div>
+
+                      <div class="form-group col-sm-3">
+                        <label for="categoria_zona">Categoria (Zona)</label>
+                            <ng-select [items]="zonas"                   
+                                            [multiple]="false"
+                                            placeholder="Ex.: Rural, Urbana..."
+                                            formControlName="categoria_zona">
+                            </ng-select>
+                      </div>
+                    
+
+                      <div class="form-group col-sm-3">
+                      <label for="categoria_tipo">Categoria (Tipo)</label>
+                            <ng-select [items]="rede"                   
+                                                [multiple]="false"
+                                                placeholder="Ex.: Federal, Municipal, Privada..."
+                                                formControlName="categoria_tipo">
+                            </ng-select>
+                        
+                      </div>
+                    </div>
+
+                   
+                     
+                  
+                      <button [disabled]="escolaForm.invalid" (click)="cadastrarEscola()" class="btn pull-right btn-primary">
+                        Salvar
+                      </button>
+
+                  </form>
+                  
+              </div>
+      </div>
+  </div>
+
+</div>
+

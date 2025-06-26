@@ -1,0 +1,64 @@
+<div widget class="card border-0 box-shadow">
+  <div class="card-header transparent border-0 text-muted">
+    <button class="btn btn-outline-danger pull-right" (click)="prepareDesactiveBath($event)">
+      <i class="fa fa-times-circle text-danger"></i> Desativar em Massa
+    </button>
+
+  </div>
+  <div class="card-body pt-0 widget-body">
+    <p class="text-left fs-13 text-gray"> </p>
+    <div class="table-responsive">
+      <ng2-smart-table  class="table table-hover tr-selecionavel"
+                            [settings]="settings" 
+                            [source]="source" 
+                            (create)="onCreate($event)"
+                            (delete)="prepareDesactiveOne($event)" 
+                            (edit)="onEdit($event)"
+                            (userRowSelect)="onUserRowSelect($event)"
+                            (custom)="onCustom($event)">
+                          </ng2-smart-table>
+      </div>          
+  </div>
+</div>
+
+
+
+
+<ng-template #modalDesactive let-modal>
+
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Desativação de Beneficiário</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  
+  <div class="modal-body">
+    
+    <form [formGroup]="desactiveForm">
+      <p class="text-info">{{nameBeneficiarioOnDesactive}}</p>
+      <div class="form-group">
+        <label class="form-control-label">Justificativa da Desativação<span
+            class="text-danger">*</span></label>
+        <input type="text"  class="form-control"
+          formControlName="justificativa" />
+
+        <div class="text-danger"
+          *ngIf="desactiveForm.get('justificativa').invalid && submittingDesactive">
+          <div *ngIf="desactiveForm.get('justificativa').errors.required">Justificativa Obrigatória!</div>
+        </div>
+      </div>
+
+      <input type="hidden"  class="form-control"
+      formControlName="beneficiario_id" />
+     
+    </form>
+  
+  </div>
+  
+  <div class="modal-footer">
+    <button type="button"
+    [disabled]="submittingDesactive" 
+    class="btn btn-outline-danger" (click)="desactive()">Confirmar Desativação</button>
+  </div>
+</ng-template>

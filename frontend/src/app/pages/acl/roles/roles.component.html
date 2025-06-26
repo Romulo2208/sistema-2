@@ -1,0 +1,79 @@
+<div widget class="card border-0 box-shadow">
+  <div class="card-header transparent border-0 text-muted">
+
+    <div class="widget-controls">
+      <a data-widgster="expand" href="#" class="transition"><i class="fa fa-chevron-down"></i></a>
+      <a data-widgster="collapse" href="#" class="transition"><i class="fa fa-chevron-up"></i></a>
+      <a data-widgster="fullscreen" href="#" class="transition"><i class="fa fa-expand"></i></a>
+      <a data-widgster="restore" href="#" class="transition"><i class="fa fa-compress"></i></a>
+
+    </div>
+  </div>
+  <div class="card-body pt-0 widget-body">
+    <p class="text-left fs-13 text-gray">Clique no grupo para adicionar permissão</p>
+    <div class="table-responsive">
+      <ng2-smart-table class="table table-hover tr-selecionavel" 
+        [settings]="settings" 
+        [source]="source"
+        (createConfirm)="onCreate($event)" 
+        (deleteConfirm)="onDelete($event)" 
+        (editConfirm)="onEdit($event)"
+        (userRowSelect)="onRowSelect($event)">
+      </ng2-smart-table>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<!-- Bloco para remover as permissões da regra selecionada -->
+<div widget class="card border-0 box-shadow mt-3" [hidden]="!!!selected_role">
+  <div class="card-body pt-0 widget-body">
+    <p class="title fs-20 text-black mt-2">Sincronizar permissões da Role : <b>{{selected_role?.name}}</b></p>
+    <form [formGroup]="addPermissionForm" (submit)="SyncPermissionsRole()">
+
+      <div class="form-row">
+        <div class="form-group col-md-8">
+          <label class="form-control-label">Role</label>
+          <input type="text" class="form-control" value="{{selected_role?.name}}" readonly>
+          <input type="hidden" class="form-control" formControlName="role_id">
+          <div class="text-danger" *ngIf="addPermissionForm.get('role_id').invalid && addPermissionForm.get('role_id').touched">
+            <div *ngIf="addPermissionForm.get('role_id').errors.required">dado obrigatório</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+              
+        <div class="form-group col-md-8">
+          <label class="form-control-label">Função</label>
+          <ng-select 
+            [items]="permissions"
+            [multiple]="true"
+            bindValue="id"
+            bindLabel="name"
+            formControlName="permissions">
+          </ng-select>
+
+          <div class="text-danger" *ngIf="addPermissionForm.get('permissions').invalid && addPermissionForm.get('permissions').touched">
+            <div *ngIf="addPermissionForm.get('permissions').errors.required">dado obrigatório</div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-md-3 .px-2">
+          <button type="submit" [disabled]="addPermissionForm.invalid" class="btn btn-success  float-left mt-4">
+            Sincronizar
+          </button>
+        </div>
+      </div>
+
+    </form>
+
+  </div>
+</div>

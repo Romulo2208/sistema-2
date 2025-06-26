@@ -1,0 +1,100 @@
+<div class="col-lg-12 col-md-8 mb-2">
+  <div class="card">
+    <div class="d-flex mb-2">
+      <input
+        type="file"
+        accept="*/*"
+        (change)="onFileSelected($event)"
+        class="form-control-file"
+        #fileInput
+      />
+      <button
+        class="btn btn-primary ms-2"
+        [disabled]="!selectedFile"
+        (click)="onUpload()"
+      >
+        Enviar
+      </button>
+    </div>
+  </div>
+</div>
+
+<ng-template #justModal>
+  <div class="modal-body">
+    <div class="form-group">
+      <label>Justificativa (opcional)</label>
+      <textarea class="form-control" [(ngModel)]="justificativa"></textarea>
+    </div>
+    <div class="text-right">
+      <button class="btn btn-secondary mr-2" (click)="modalRef.close()">Cancelar</button>
+      <button class="btn btn-primary" (click)="confirmAction()">Confirmar</button>
+    </div>
+  </div>
+</ng-template>
+
+<div class="col-lg-12 col-md-8 mb-2">
+  <div *ngIf="successMessage" class="alert alert-success" role="alert">
+    {{ successMessage }}
+  </div>
+  <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+    {{ errorMessage }}
+  </div>
+  <div class="card">
+    <h5 class="card-title">Documentos Enviados</h5>
+    <table class="table table-hover tr-selecionavel">
+      <thead>
+        <tr style="color: #1e6bb8;">
+          <th>#</th>
+          <th>Nome do Arquivo</th>
+          <th>Núcleo</th>
+          <th>Status</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let doc of files; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>
+            <ng-container *ngIf="editingFile?.id !== doc.id">
+              {{ doc.name }}
+            </ng-container>
+            <ng-container *ngIf="editingFile?.id === doc.id">
+              <input type="text" [(ngModel)]="newFileName" class="form-control d-inline-block w-auto" />
+              <button class="btn btn-sm btn-success ml-2" (click)="saveEdit()">Salvar</button>
+              <button class="btn btn-sm btn-secondary ml-2" (click)="cancelEdit()">Cancelar</button>
+            </ng-container>
+          </td>
+          <td>{{ doc.nucleo_nome }}</td>
+          <td>{{ doc.status }}</td>
+          <td>
+            <a href="#" (click)="onDownload(doc); $event.preventDefault()" title="Download">
+              <i class="fa fa-download" aria-hidden="true"></i>
+            </a>
+            <a href="#" *ngIf="userRole === 'admin' || userRole === 'coordenador_geral'" (click)="startEdit(doc); $event.preventDefault()" title="Renomear" class="ml-3">
+              <i class="fa fa-edit" aria-hidden="true"></i>
+            </a>
+            <a href="#" *ngIf="userRole === 'admin' || userRole === 'coordenador_geral'" (click)="onDelete(doc); $event.preventDefault()" title="Excluir" class="ml-3 text-danger">
+              <i class="fa fa-trash" aria-hidden="true"></i>
+            </a>
+            <button *ngIf="userRole === 'gestor_regional' && doc.status !== 'Aprovado Coordenador' && doc.status !== 'Rejeitado Coordenador'" class="btn btn-sm btn-success ml-2" (click)="openJustificativa(justModal, 'approve', doc)">
+              Aprovar
+            </button>
+            <button *ngIf="userRole === 'gestor_regional' && doc.status !== 'Aprovado Coordenador' && doc.status !== 'Rejeitado Coordenador'" class="btn btn-sm btn-danger ml-2" (click)="openJustificativa(justModal, 'reject', doc)">
+              Rejeitar
+            </button>
+            <button *ngIf="userRole === 'coordenador_geral' && doc.status === 'Aprovado Coordenador'" class="btn btn-sm btn-success ml-2" (click)="openJustificativa(justModal, 'approveGeral', doc)">
+              Aprovar CG
+            </button>
+            <button *ngIf="userRole === 'coordenador_geral' && doc.status === 'Aprovado Coordenador'" class="btn btn-sm btn-danger ml-2" (click)="openJustificativa(justModal, 'rejectGeral', doc)">
+              Rejeitar CG
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="files.length === 0">
+          <td colspan="3" class="text-center">Nenhum documento enviado</td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+</div>

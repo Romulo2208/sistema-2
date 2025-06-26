@@ -1,0 +1,141 @@
+<div class="row">
+  <div class="col-md">
+    <div widget class="card border-0 box-shadow">
+      <div class="card-header transparent border-0 text-muted">
+        <h5 class="mb-0">{{pageTitle}}</h5>
+      </div>
+      <div class="card-body pt-0 widget-body">
+        <div class="row">
+          <div class=" col-md">
+            <a routerLink="/nucleos" class="btn btn-secondary float-right">
+              <i class="fa fa-arrow-left"></i> Voltar
+            </a>
+          </div>
+        </div>
+
+
+        <div class="form-row">
+
+          <div class="form-group col-md-6">
+            
+            <label class="form-control-label">Escolha a região</label>
+            
+            <ng-select [items]="regiao" 
+                        bindLabel="regiao" 
+                        placeholder="Escolha a região"
+                        [(ngModel)]="selectedRegiao"
+                        (change)=loadUFByRegiao($event)>
+            </ng-select>
+            
+            <!-- <br/>Selected: {{selectedRegiao}} -->
+
+          </div>
+        </div>
+
+
+        <div class="form-row" *ngIf="selectedRegiao">
+          
+          <div class="form-group col-md-6">
+            
+            <label class="form-control-label">Escolha o Estado</label>
+            
+            <ng-select [items]="ufs_by_regiao" 
+                        bindLabel="uf" 
+                        placeholder="Escolha a região"
+                        [(ngModel)]="selectedUF"
+                        (change)=loadMunicipiosByUF($event)>
+            </ng-select>
+            
+            <!-- <br/>Selected: {{selectedRegiao}} -->
+
+          </div>
+        </div>
+
+        <!--Início do Formulário-->
+        <form [formGroup]="nucleoForm" (submit)="submitForm()" *ngIf="selectedUF">
+
+          <div class="form-row">
+
+            <div class="form-group col-md-6">
+              
+              <label class="form-control-label">Escolha o Comar</label>
+              
+              <ng-select [items]="comars" 
+                          bindLabel="descricao" 
+                          bindValue="id" 
+                          placeholder="Escolha o Comar"
+                          formControlName="comar_id">
+              </ng-select>
+              
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label class="form-control-label">Município do Núcleo</label>
+              
+            <ng-select [items]="municipios" 
+                        bindLabel="municipio" 
+                        bindValue="id"
+                        placeholder="Escolha o município"
+                        formControlName="municipio_id">
+            </ng-select>
+
+
+              <div class="text-danger" *ngIf="nucleoForm.get('municipio_id').invalid && nucleoForm.get('municipio_id').touched">
+                <div *ngIf="nucleoForm.get('municipio_id').errors.required">dado obrigatório</div>
+              </div>
+            </div>
+          </div>
+
+
+
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label class="form-control-label">Nome do Núcleo</label>
+              <textarea type="text" class="form-control" formControlName="descricao">
+
+              </textarea>
+              <div class="text-danger" *ngIf="nucleoForm.get('descricao').invalid && nucleoForm.get('descricao').touched">
+                <div *ngIf="nucleoForm.get('descricao').errors.required">dado obrigatório</div>
+              </div>
+            </div>
+          </div> 
+
+
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label class="form-control-label">Dias e Turnos de Funcionamento</label>
+              
+            <ng-select [items]="dias_turnos" 
+                        bindLabel="descricao" 
+                        bindValue="id"
+                        [multiple]="true"
+                        placeholder="Escolha os dia(s) e turno(s)"
+                        formControlName="diaTurnoNucleos">
+            </ng-select>
+
+
+              <div class="text-danger" *ngIf="nucleoForm.get('diaTurnoNucleos').invalid && nucleoForm.get('diaTurnoNucleos').touched">
+                <div *ngIf="nucleoForm.get('diaTurnoNucleos').errors.required">dado obrigatório</div>
+              </div>
+              
+            </div>
+          </div>
+
+
+          <div class="row pl-3">
+            <button [disabled]="submittingForm || nucleoForm.invalid" type="submit"
+              class="btn btn-primary btn-lg float-left mt-3">
+              Salvar
+            </button>
+          </div> 
+        </form>
+        <!--Término do Formulário-->
+        <!-- <pre>{{agendas_dia_turno_selecionados | json}}</pre> -->
+
+      </div>
+    </div>
+  </div>
+
+</div>
