@@ -15,6 +15,7 @@ export interface FileInfo {
   status?: string;
   nucleo_id?: number;
   nucleo_nome?: string;
+  ativo?: boolean;
 }
 
 @Injectable({ providedIn: 'root' })

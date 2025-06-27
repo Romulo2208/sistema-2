@@ -21,6 +21,7 @@ export class DocumentosNucleoComponent implements OnInit {
     selectedDoc: FileInfo | null = null;
     action: 'approve' | 'reject' | 'approveGeral' | 'rejectGeral' = 'approve';
     modalRef!: NgbModalRef;
+    hasActiveDoc: boolean = false;
 
     constructor(private svc: UploadService, public modalService: NgbModal) { }
 
@@ -44,6 +45,7 @@ export class DocumentosNucleoComponent implements OnInit {
         console.log('Arquivos recebidos:', files);
         this.files = files;
         this.files.forEach(f => console.log('file path:', f.path));
+        this.hasActiveDoc = this.files.some(f => f.ativo && new Date(f.created_at!).getFullYear() === new Date().getFullYear());
         this.clearMessages();
       },
       error: (err) => {
@@ -73,6 +75,9 @@ export class DocumentosNucleoComponent implements OnInit {
       next: (res) => {
         console.log('Upload bem-sucedido:', res);
         this.files.unshift(res);
+        if (res.ativo && new Date(res.created_at!).getFullYear() === new Date().getFullYear()) {
+          this.hasActiveDoc = true;
+        }
         this.selectedFile = undefined;
         this.fileInput.nativeElement.value = '';
         this.setSuccessMessage(`Arquivo "${res.name}" enviado com sucesso!`);
@@ -146,6 +151,7 @@ export class DocumentosNucleoComponent implements OnInit {
       next: () => {
         console.log('Arquivo excluído com sucesso:', doc.name);
         this.files = this.files.filter(f => f.id !== doc.id);
+        this.hasActiveDoc = this.files.some(f => f.ativo && new Date(f.created_at!).getFullYear() === new Date().getFullYear());
         this.setSuccessMessage(`Arquivo "${doc.name}" excluído com sucesso!`);
       },
       error: (err) => {
@@ -183,13 +189,16 @@ export class DocumentosNucleoComponent implements OnInit {
           this.selectedDoc!.status = 'Aprovado Coordenador';
         } else if (this.action === 'reject') {
           this.selectedDoc!.status = 'Rejeitado Coordenador';
+          this.selectedDoc!.ativo = false;
         } else if (this.action === 'approveGeral') {
           this.selectedDoc!.status = 'Aprovado Coordenador Geral';
         } else {
           this.selectedDoc!.status = 'Rejeitado Coordenador Geral';
+          this.selectedDoc!.ativo = false;
         }
         const msg = this.action.includes('approve') ? 'aprovado' : 'rejeitado';
         this.setSuccessMessage(`Arquivo "${this.selectedDoc!.name}" ${msg} com sucesso!`);
+        this.hasActiveDoc = this.files.some(f => f.ativo && new Date(f.created_at!).getFullYear() === new Date().getFullYear());
         this.modalRef.close();
       },
       error: (err) => {

@@ -26,6 +26,7 @@ class DocumentoNucleo extends Model
         'nucleo_id',
         'comar_id',
         'status',
+        'ativo',
     ];
 
     public function nucleo()
