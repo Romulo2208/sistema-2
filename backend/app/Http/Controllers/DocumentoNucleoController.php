@@ -35,6 +35,7 @@ class DocumentoNucleoController extends Controller
                     'user_id' => $fileDoc->user_id,
                     'comar_id' => $fileDoc->comar_id,
                     'status' => $fileDoc->status,
+                    'ativo' => $fileDoc->ativo,
                     'created_at' => $fileDoc->created_at,
                 ];
             });
@@ -58,6 +59,12 @@ class DocumentoNucleoController extends Controller
         $nucloeId = auth()->user()->nucleos->first()->id;
         $comarId = auth()->user()->comars->first()->id;
 
+        $year = now()->year;
+        DocumentoNucleo::where('nucleo_id', $nucloeId)
+            ->whereYear('created_at', $year)
+            ->where('ativo', true)
+            ->update(['ativo' => false]);
+
         $originalName = $file->getClientOriginalName();
         $path = $s3->putFile('nucleo-documentos', $file);
         $url = $s3->url($path);
@@ -72,6 +79,7 @@ class DocumentoNucleoController extends Controller
             'nucleo_id' => $nucloeId,
             'comar_id' => $comarId,
             'status' => "pendente",
+            'ativo' => true,
         ]);
 
         return response()->json([
@@ -83,6 +91,7 @@ class DocumentoNucleoController extends Controller
             'size' => $file->getSize(),
             'nucleo_id' => $fileModel->nucleo_id,
             'nucleo_nome' => optional($fileModel->nucleo)->descricao,
+            'ativo' => $fileModel->ativo,
             'created_at' => $fileModel->created_at->toIso8601String(),
         ]);
 
@@ -101,12 +110,22 @@ class DocumentoNucleoController extends Controller
             $path = $file->storeAs('documents', $fileName, 'minio');
             $url = Storage::disk('minio')->url($path);
 
+            $nucloeId = auth()->user()->nucleos->first()->id ?? null;
+            if ($nucloeId) {
+                $year = now()->year;
+                DocumentoNucleo::where('nucleo_id', $nucloeId)
+                    ->whereYear('created_at', $year)
+                    ->where('ativo', true)
+                    ->update(['ativo' => false]);
+            }
+
             $fileModel = DocumentoNucleo::create([
                 'name' => $originalName,
                 'path' => $path,
                 'url' => $url,
                 'mime_type' => $file->getClientMimeType(),
                 'size' => $file->getSize(),
+                'ativo' => true,
             ]);
 
             Log::info('Arquivo salvo no banco de dados:', $fileModel->toArray());
@@ -118,6 +137,7 @@ class DocumentoNucleoController extends Controller
                 'path' => $path,
                 'nucleo_id' => $fileModel->nucleo_id,
                 'nucleo_nome' => optional($fileModel->nucleo)->descricao,
+                'ativo' => $fileModel->ativo,
             ], 201);
         } catch (\Exception $e) {
             Log::error('Erro ao salvar arquivo: ' . $e->getMessage());
@@ -153,6 +173,7 @@ class DocumentoNucleoController extends Controller
                 'path' => $file->path,
                 'mime_type' => $file->mime_type,
                 'size' => $file->size,
+                'ativo' => $file->ativo,
                 'created_at' => $file->created_at,
             ]);
         } catch (\Exception $e) {
@@ -250,6 +271,7 @@ class DocumentoNucleoController extends Controller
             }
 
             $file->status = 'Rejeitado Coordenador';
+            $file->ativo = false;
             $file->save();
 
             StatusDocumento::create([
@@ -304,6 +326,7 @@ class DocumentoNucleoController extends Controller
             }
 
             $file->status = 'Rejeitado Coordenador Geral';
+            $file->ativo = false;
             $file->save();
 
             StatusDocumento::create([
